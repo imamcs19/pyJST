@@ -4,6 +4,7 @@ Fakultas Ilmu Komputer (Filkom), Universitas Brawijaya (UB) 2022.
 
 Dosen Pengampu: 
 1. Imam Cholissodin, S.Si., M.Kom. | email: imamcs@ub.ac.id | Filkom UB
+2. Muhammad Tanzil Furqon, S.Kom., M.Cs. | email: m.tanzil.furqon@ub.ac.id | Filkom UB
 
 Screenshot Hasil Running contoh program untuk JST:
 ![Ngrok x Flask on Google Colab - Login & Register - BigDataApps Rev2.1](https://github.com/imamcs19/FGA-Big-Data-Using-Python-Filkom-x-Mipa-UB-2021/blob/main/Ngrok%20x%20Flask%20on%20Google%20Colab%20-%20Login%20%26%20Register%20-%20BigDataApps%20Rev2.1.png)
