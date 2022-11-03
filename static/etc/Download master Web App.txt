@@ -1,11 +1,11 @@
 Cara ke-1:
-1. Link download File Master webapp DAA Kelas H, ketikkan
+1. Link download File Master webapp JST Kelas EF, buka bash, lalu ketikkan
 —---------------
-$ git clone https://github.com/imamcs19/pyDAA.git
+$ git clone https://github.com/imamcs19/pyJST.git
 
 2. Lalu ketikkan 
 ------------------
-$mv ./pyDAA/* ./mysite
+$mv ./pyJST/* ./mysite
 , lalu tekan Reload
 
 3. pip install -r ./mysite/requirements.txt
