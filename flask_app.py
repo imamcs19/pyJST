@@ -104,6 +104,9 @@ Z_z = FrameWeb_bawah
 
 @app.route('/som', methods=['GET'])
 def som():
+    # ref: 
+    # [0] https://towardsdatascience.com/understanding-self-organising-map-neural-network-with-python-code-7a77f501e985
+    
     # a = 12
     # b = 7
     # return str(a+b)
