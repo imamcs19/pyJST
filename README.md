@@ -6,6 +6,8 @@ Dosen Pengampu:
 1. Imam Cholissodin, S.Si., M.Kom. | email: imamcs@ub.ac.id | Filkom UB
 
 
+
+
 Big Thanks to PythonAnywhere & for all Ref. Semoga Bermanfaat dan Sukses untuk Semua. :D
 
 [1]	Fausett, L. 1994. Fundamentals of Neural Networks. Prentice Hall
