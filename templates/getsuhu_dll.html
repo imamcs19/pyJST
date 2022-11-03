@@ -1,0 +1,277 @@
+{% extends "extends/base.html" %}
+{% block title %}
+    <title>Web App DAA Using Python</title>
+{% endblock title %}
+{{ self.title() }}
+    Home
+{{ self.title() }}
+<button onclick="window.location.href='/'" class="btn btn-outline btn-rounded btn-info">
+    <i class="ti-arrow-left m-l-5"></i>
+    <span>Back Home</span>
+</button> Project 1
+
+{{ self.title() }}
+    Project 1
+
+{% block content %}
+
+
+<div class="card card-default">
+    <div class="card-body">
+        <form id="main_form" enctype="multipart/form-data" action="{{ url_for('iot') }}" method="post" novalidate="novalidate">
+            <div class="form-group">
+                <h1 style="line-height:1.2;margin-top:0pt;margin-bottom:0pt;">
+                    <span style="font-size: 36pt; font-family: Roboto; color: rgb(53, 55, 68); background-color: transparent; font-weight: 700; font-style: normal; font-variant: normal;">
+                        Get data cuaca dari API 😊🚀🤝👍
+                    </span>
+                </h1>
+            </div>
+            <div class="form-group">
+                <a onclick="KonfirmasiSubmit()" class="btn btn-flat btn-primary" style="min-width: 200px"><i class="fa fa-check"></i> Download All data as *.CSV</a>
+            </div>
+        <input name="__myRequestVerificationToken" type="hidden" value="codeCoVeRBDC2021"></form>
+    </div>
+</div>
+<div class="card card-default">
+    <div class="card-header">
+        <h5>
+            <b>
+                List Hasil API dari data IoT Vendor
+            </b>
+        </h5>
+    </div>
+    <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <table class="table dataTable no-footer" id="main_table2" role="grid" aria-describedby="main_table2_info">
+                            <thead>
+                                <tr role="row">
+                                    <th class="nosort sorting_disabled" rowspan="1" colspan="1" aria-label="
+                                        No
+                                    " style="width: 45.9375px;">
+                                        No
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="main_table2" rowspan="1" colspan="1" aria-label="
+                                        Waktu Unggah
+                                    : activate to sort column ascending" style="width: 189.469px;">
+                                        Waktu Ambil Data
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="main_table2" rowspan="1" colspan="1" aria-label="
+                                        Nama Anggota/Kode Kelompok
+                                    : activate to sort column ascending" style="width: 203.781px;">
+                                        Nama Kota
+                                    </th>
+                                    <th class="sorting_desc" tabindex="0" aria-controls="main_table2" rowspan="1" colspan="1" aria-label="
+                                        Skor
+                                    : activate to sort column ascending" aria-sort="descending" style="width: 77.6562px;">
+                                        Suhu (Celcius)
+                                    </th>
+                                    <th class="sorting_desc" tabindex="0" aria-controls="main_table2" rowspan="1" colspan="1" aria-label="
+                                        Skor
+                                    : activate to sort column ascending" aria-sort="descending" style="width: 77.6562px;">
+                                        Curah Hujan (mm)
+                                    </th>
+                                    <th class="sorting_desc" tabindex="0" aria-controls="main_table2" rowspan="1" colspan="1" aria-label="
+                                        Skor
+                                    : activate to sort column ascending" aria-sort="descending" style="width: 77.6562px;">
+                                        Kelembaban
+                                    </th>
+                                    <th class="sorting_desc" tabindex="0" aria-controls="main_table2" rowspan="1" colspan="1" aria-label="
+                                        Skor
+                                    : activate to sort column ascending" aria-sort="descending" style="width: 77.6562px;">
+                                        Kecepatan Angin (mph)
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="main_table2" rowspan="1" colspan="1" aria-label="
+
+                                    : activate to sort column ascending" style="width: 189.469px;">
+
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in header %}
+                                <tr class={{ loop.cycle('odd', 'even') }} role="row">
+                                    <td>{{ loop.index }}</td>
+                                    <td class="">{{item[0]}}</td>
+                                    <td class="">{{item[1]}}</td>
+                                    <td class="sorting_1">{{'%0.4f'|format(item[2]|float)}}</td>
+                                    <td class="">{{item[3]}}</td>
+                                    <td class="">{{item[4]}}</td>
+                                    <td class="">{{item[5]}}</td>
+
+                                    <td>
+                                        <div class="btn-group btn-group-xs" role="group">
+                                            {% if(session['name']=='Imam Cholissodin' or session['name'] is not defined or session['name']!='Imam Cholissodin') %}
+                                            <a href="/dw_iot/?date_var={{item[0]}}">
+                                        	<button type="submit" class="btn btn-secondary footable-edit">
+                                        		<span class="fas fa-download" aria-hidden="true">
+                                        		</span>
+                                        	</button>
+                                        	</a>
+                                        	{% endif %}
+
+                                        	<a href="/del_iot/?date_var={{item[0]}}&kota_var={{item[1]}}">
+                                        	<button type="submit" class="btn btn-secondary footable-delete">
+                                        		<span class="fas fa-trash-alt" aria-hidden="true" style="color:red">
+                                        		</span>
+                                        	</button>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-100 text-right mt-4">
+            <a class="btn btn-flat btn-default" href="https://bigdatafga.pythonanywhere.com"><i class="fa fa-arrow-left"></i> Kembali</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- ./wrapper -->
+<!-- REQUIRED SCRIPTS -->
+<!-- jQuery -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/jquery.min.js.download') }}"></script>
+<!-- Bootstrap 4 -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/bootstrap.bundle.min.js.download') }}"></script>
+<!-- AdminLTE App -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/adminlte.min.js.download') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/sweetalert2-9.10.12.min.js.download') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/site.js.download') }}"></script>
+
+
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/jquery.validate.min.js.download') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/jquery.validate.unobtrusive.min.js.download') }}"></script>
+<script>
+    $("#main_form").validate();
+</script>
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/css_tabel_suhu/dataTables.bootstrap4.min.css') }}" />
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/jquery.dataTables.min.js.download') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/dataTables.bootstrap4.min.js.download') }}"></script>
+
+<script>
+    var table = null;
+    setDatatables("#main_table");
+
+    function setDatatables(element, sortCol, direction) {
+        sortCol = sortCol || 1;
+        direction = direction || "asc";
+        table = $(element).DataTable({
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": 0
+            }, {
+                "searchable": false,
+                "orderable": false,
+                "targets": "nosort"
+            }],
+            "order": [[sortCol, direction]]
+        });
+
+        table.on('order.dt search.dt', function () {
+            table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+        $(element).wrap("<div class='table-responsive'></div>");
+    }
+
+    function SetDatatablesServerSide(el, filterClass, callback) {
+        $(document).ready(function () {
+            table = $(el).dataTable({
+                "aaSorting": [1],
+                "bServerSide": true,
+                "bStateSave": true,
+                "sAjaxSource": "/Lomba/BDC/DataTable",
+                "bProcessing": true,
+                "aoColumnDefs": [{ "bSortable": false, "aTargets": "nosort" }],
+                fnServerParams: callback
+                //fnServerParams: function (aoData) {
+                //    //this function is called each time fnServerParams sends data to server
+                //    filter.forEach(function(item, index) {
+                //        aoData.push(item);
+                //    });
+                //    //aoData.push({ "name": "Tahun", "value": $('#Tahun').val() });
+                //    //aoData.push({ "name": "UnitId", "value": $('#UnitId').val() });
+                //    //aoData.push({ "name": "PegawaiId", "value": $('#PegawaiId').val() });
+                //}
+            });
+            $(el).css("width", "100%");
+            $(el).wrap("<div class='table-responsive'></div>");
+
+            if (filterClass != undefined) {
+                $(`.${filterClass}`).change(function() {
+                    table.fnDraw();
+                });
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_tabel_suhu/jquery.form.min.js.download') }}"></script>
+<script>
+    function SetJqueryForm(idForm) {
+        idForm = idForm || "main_form";
+        $("#" + idForm).ajaxForm({
+            beforeSubmit: function () {
+                ShowLoading();
+            },
+            success: function (res) {
+                if (res.status) {
+                    window.onbeforeunload = function () {
+                    }
+                    if (res.url !== "" && res.url !== null) {
+                        location.replace(res.url);
+                    } else {
+                        location.reload();
+                    }
+                } else {
+                    ShowError(res.message);
+                }
+            },
+            error: function (a, b, c) {
+                ShowError(b);
+            }
+        });
+    }
+
+    function SetJqueryFormNoRedirect(idForm, idModal) {
+        idForm = idForm || "main_form";
+        idModal = idModal || "main_modal";
+        $("#" + idForm).ajaxForm({
+            beforeSubmit: function () {
+                ShowLoading();
+            },
+            success: function (res) {
+                if (res.status) {
+                    window.onbeforeunload = function () {
+                    }
+                    $("#" + idModal).modal("hide");
+                    ShowSuccess(res.message);
+                } else {
+                    ShowError(res.message);
+                }
+            },
+            error: function (a, b, c) {
+                ShowError(b);
+            }
+        });
+    }
+</script>
+<script>
+    setDatatables("#main_table2", 4, "desc");
+
+    SetJqueryForm();
+</script>
+
+
+{% endblock content %}

@@ -1,0 +1,25 @@
+
+    {% block content %}
+    <h1>
+        List y_aktual vs y_prediksi dan MAPE
+    </h1>
+
+    <p>test section y_aktual</p>
+    <ol>
+        {% for va in y_aktual %}
+        <li>{{va}}</li>
+        {% endfor %}
+    </ol>
+    <p>test section y_prediksi</p>
+    <ol>
+        {% for vp in y_prediksi %}
+        <li>{{vp}}</li>
+        {% endfor %}
+    </ol>
+    <p>Nilai Mape: 
+        <li>{{mape}}</li> 
+    </p>
+
+
+{% endblock content %}
+

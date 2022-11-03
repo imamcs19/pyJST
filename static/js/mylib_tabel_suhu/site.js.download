@@ -1,0 +1,250 @@
+// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+// for details on configuring this project to bundle and minify static web assets.
+
+// Write your JavaScript code.
+function SetRequired() {
+    $(".harus").each(function () {
+        let element = $(this).parent().find(":input").first();
+        let id = element.attr("name");
+        id = id.replace("[", "_").replace("].", "__");
+        element.attr("required", "required");
+        $(this).parent().append(GetErrorLabel(id));
+    });
+}
+
+function GetErrorLabel(id) {
+    return `<label id="${id}-error" class="error" for="${id}" style="display:none">This field is required.</label>`;
+}
+
+function AddSpin(el) {
+    $(el).html(`<div style="width: 100%;text-align:center"><i class="fas fa-3x fa-sync-alt fa-spin"></i></div>`);
+}
+
+function AddSpinSmall(el) {
+    $(el).html(`<div class='text-warning' style="width: 100%;"><i class="fas fa-sync-alt fa-spin"></i></div>`);
+}
+
+function ShowError(message) {
+    Swal.fire(
+        "Gagal!",
+        message,
+        "error"
+    );
+}
+
+function ShowSuccess(message) {
+    Swal.fire(
+        "Berhasil!",
+        message,
+        "success"
+    );
+}
+
+function ShowInfo(message) {
+    Swal.fire(
+        "Info!",
+        message,
+        "info"
+    );
+}
+
+function ShowDevelopmentInfo() {
+    ShowInfo("Maaf, fitur ini sedang dalam masa pengembangan.");
+}
+
+function ShowLoading() {
+    Swal.fire({
+        title: 'Mohon tunggu...!',
+        //html: 'data uploading',// add html attribute if you want or remove
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+function SetValidateUsername() {
+    var validUsername = 0;
+    $("#Username").change(function () {
+        CekUsername();
+    });
+    //$("#main_form").submit(function (e) {
+    //    CekUsername();
+    //    if (validUsername !== 0) {
+    //        e.preventDefault();
+    //    }
+    //});
+
+}
+function CekUsername() {
+    AddSpinSmall("#pesan_username");
+    $.ajax({
+        url: "/Ajax/CekUsername",
+        data: {
+            u: $("#Username").val()
+        },
+        success: function (res) {
+            if (res > 0) {
+                $("#pesan_username").html(`<span class="text-danger"><i class="fa fa-times"></i> Username sudah digunakan, silahkan gunakan username lain.</span>`);
+            } else if (res === 0) {
+                $("#pesan_username").html(`<span class="text-success"><i class="fa fa-check"></i> Username bisa digunakan.</span>`);
+            } else {
+                $("#pesan_username").html("");
+            }
+            validUsername = res;
+        }
+    });
+}
+
+function SetCekNIM(idPT, idProdi, idNIM) {
+    $("#" + idNIM).change(function () {
+        CekNIM(idPT, idProdi, idNIM);
+    });
+}
+
+function CekNIM(idPT, idProdi, idNIM) {
+    var validNIM = false;
+    AddSpinSmall(`#pesan_${idNIM}`);
+    $.ajax({
+        url: "/Ajax/CekNIM",
+        data: {
+            pt: $("#" + idPT).val(),
+            prodi: $("#" + idProdi).val(),
+            nim: $("#" + idNIM).val()
+        },
+        success: function (res) {
+            $("#pesan_" + idNIM).html(res.message);
+            validNIM = res.status;
+        }
+    });
+}
+
+$(".btn-js").click(function () {
+    let url = $(this).attr("href");
+    window.location.href = url;
+});
+
+function DisableButtons() {
+    $(".btn").each(function () {
+        $(this).addClass("disabled");
+    });
+}
+
+function EnableButtons() {
+    $(".btn").each(function () {
+        $(this).removeClass("disabled");
+    });
+}
+
+function SetSummernote(el) {
+    $(el).summernote({
+        height: 200,
+        callbacks: {
+            onImageUpload: function (image) {
+                uploadImage(el, image[0]);
+            }
+        }
+    });
+    var summernoteIndex = 0;
+    $("div.note-editable.card-block").each(function () {
+        $(this).attr("id", `summernote-${summernoteIndex}`);
+        summernoteIndex++;
+    });
+}
+
+function uploadImage(el, image) {
+    var data = new FormData();
+    data.append("image", image);
+    $.ajax({
+        url: "/Ajax/UploadImages",
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: data,
+        type: "post",
+        success: function (result) {
+            if (result.status) {
+                //var image = $('<img>').attr('src', result.data);
+                $(el).summernote("insertImage", result.message);
+            } else {
+                ShowError(result.message);
+            }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
+
+function SubmitForm(formId, text, confirmLabel) {
+    text = text || "Anda akan mengirimkan form ini";
+    confirmLabel = confirmLabel || "Ya, kirim data ini!";
+    Swal.fire({
+        title: "Apakah Anda yakin?",
+        text: text,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Batal",
+        confirmButtonText: confirmLabel
+    }).then((result) => {
+        if (result.value) {
+
+            let form = $(`#${formId}`);
+            var formData = new FormData(form[0]);
+
+            if (!form[0].checkValidity()) {
+                form.submit();
+            } else {
+                AddSpin("#tempat_spin");
+                DisableButtons();
+
+                $.ajax({
+                    url: form.attr("action"),
+                    type: "POST",
+                    data: formData,
+                    success: function (data) {
+                        EnableButtons();
+                        $("#tempat_spin").hide();
+
+                        if (data.status === true) {
+                            window.location.reload();
+                        } else {
+                            ShowError(data.message);
+                        }
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            }
+        }
+    });
+}
+
+function KonfirmasiSubmit(idForm, message) {
+    idForm = idForm || "main_form";
+    Konfirmasi(message,
+        () => {
+            $("#" + idForm).submit();
+        });
+}
+
+function Konfirmasi(message, callback) {
+    message = message || "Anda ingin mengexport form ini ke CSV!";
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: message,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Batal',
+        confirmButtonText: 'Ya'
+    }).then((result) => {
+        if (result.value) {
+            callback();
+        }
+    });
+}

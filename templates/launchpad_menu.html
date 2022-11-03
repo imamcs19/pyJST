@@ -1,0 +1,147 @@
+{% extends "extends/base.html" %}
+{% block title %}
+    <title>Web App JST Dgn Python</title>
+{% endblock title %}
+{{ self.title() }}
+    Home
+{{ self.title() }}
+<button onclick="window.location.href='/'" class="btn btn-outline btn-rounded btn-info">
+    <i class="ti-arrow-left m-l-5"></i>
+    <span>Back Home</span>
+</button> Project 1
+
+{{ self.title() }}
+    Launchpad Project 1
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-6 col-lg-3 col-sm-6 col-xs-12">
+        <div class="bg-info white-box m-b-0">
+            <ul class="expense-box">
+                <li><i class="ti-star text-white"></i>
+                    <div>
+                        <h1 class="text-white m-b-0">JST EF</h1>
+                        <h4 class="text-white">Filkom UB 2022</h4>
+                    </div>
+                </li>
+            </ul>
+            <img src="{{ url_for('static', filename = 'img/spark-rev2.png') }}" class="img-responsive" alt="Responsive image">
+        </div>
+        <div class="white-box">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h2 class="m-b-0 font-medium">Dasar JST<sup>TM</sup></h2>
+                    <h5 class="text-muted m-t-0">McCulloch-Pitts, Hebb Net, Perceptron (Linear Model)</h5><br>
+                </div>
+                <div class="col-xs-3">
+                    <div class="circle circle-md bg-info pull-right m-t-10"><i class="ti-star"></i></div>
+                </div>
+                <div class="btn-group btn-block">
+                    <button aria-expanded="false" data-toggle="dropdown"
+                        class="btn btn-block btn-outline btn-rounded btn-primary dropdown-toggle waves-effect waves-light"
+                        type="button">View Detail <span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="vid_anggota1">McCulloch-Pitts</a></li>
+                        <li><a href="vid_anggota2">Hebb Net</a></li>
+                        <li><a href="vid_anggota3">Perceptron</a></li>
+                        <li><a href="vid_anggota4">Adaline</a></li>
+                        <li><a href="vid_anggota5">Madaline</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 col-sm-6 col-xs-12">
+        <div class="bg-primary white-box m-b-0">
+            <ul class="expense-box">
+                <li><i class="ti-bar-chart text-white"></i>
+                    <div>
+                        <h1 class="text-white m-b-0">JST EF</h1>
+                        <h4 class="text-white">Filkom UB 2022</h4>
+                    </div>
+                </li>
+            </ul>
+            <img src="{{ url_for('static', filename = 'img/spark-rev2.png') }}" class="img-responsive" alt="Responsive image">
+        </div>
+        <div class="white-box">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h2 class="m-b-0 font-medium">JST Lanjut<sup>TM</sup></h2>
+                    <h5 class="text-muted m-t-0">SOM (unsupervised), LVQ (supervised), BPNN (supervised)</h5><br>
+                </div>
+                <div class="col-xs-3">
+                    <div class="circle circle-md bg-primary pull-right m-t-10"><i class="ti-bar-chart"></i></div>
+                </div>
+                <div class="btn-group btn-block">
+                    <button aria-expanded="false" data-toggle="dropdown"
+                        class="btn btn-block btn-outline btn-rounded btn-primary dropdown-toggle waves-effect waves-light"
+                        type="button">View Detail <span class="caret"></span></button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#">Alg. SOM</a></li>
+                        <li><a href="code_timsort">Alg. LVQ</a></li>
+                        <li><a href="bokeh">Alg. BPNN</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 col-sm-6 col-xs-12">
+        <div class="bg-info white-box m-b-0">
+            <ul class="expense-box">
+                <li><i class="ti-star text-white"></i>
+                    <div>
+                        <h1 class="text-white m-b-0">JST EF</h1>
+                        <h4 class="text-white">Filkom UB 2022</h4>
+                    </div>
+                </li>
+            </ul>
+            <img src="{{ url_for('static', filename = 'img/spark-rev2.png') }}" class="img-responsive" alt="Responsive image">
+        </div>
+        <div class="white-box">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h2 class="m-b-0 font-medium">Pengembangan JST<sup>TM</sup></h2>
+                    <h5 class="text-muted m-t-0">Membuat implementasi Alg. ELM & Intro Deep Learning</h5><br>
+                </div>
+                <div class="col-xs-3">
+                    <div class="circle circle-md bg-info pull-right m-t-10"><i class="ti-star"></i></div>
+                </div>
+                <button onclick="window.location.href='code_2_2_2'" class="btn btn-block btn-outline btn-rounded btn-info">
+                    <span>View Detail</span>
+                    <i class="ti-arrow-right m-l-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-3 col-sm-6 col-xs-12">
+        <div class="bg-primary white-box m-b-0">
+            <ul class="expense-box">
+                <li><i class="ti-server text-white"></i>
+                    <div>
+                        <h1 class="text-white m-b-0">JST EF</h1>
+                        <h4 class="text-white">Filkom UB 2022</h4>
+                    </div>
+                </li>
+            </ul>
+            <img src="{{ url_for('static', filename = 'img/spark-rev2.png') }}" class="img-responsive" alt="Responsive image">
+        </div>
+        <div class="white-box">
+            <div class="row">
+                <div class="col-xs-9">
+                    <h2 class="m-b-0 font-medium">Profile Teams<sup>&reg;</sup></h2>
+                    <h5 class="text-muted m-t-0">Pengerjaan Tugas pada Web App + Teknologi Cloud</h5><br>
+                </div>
+                <div class="col-xs-3">
+                    <div class="circle circle-md bg-primary pull-right m-t-10"><i class="ti-server"></i></div>
+                </div>
+                <button onclick="window.location.href='#'"
+                    class="btn btn-block btn-outline btn-rounded btn-primary">
+                    <span>View Detail</span>
+                    <i class="ti-arrow-right m-l-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

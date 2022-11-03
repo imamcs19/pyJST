@@ -1,0 +1,46 @@
+{% extends "extends/base.html" %}
+{% block title %}
+    <title>FGA Big Data Using Python</title>
+{% endblock title %}
+{{ self.title() }}
+    Home
+{{ self.title() }}
+<button onclick="window.location.href='/'" class="btn btn-outline btn-rounded btn-info">
+    <i class="ti-arrow-left m-l-5"></i>
+    <span>Back Home</span>
+</button> Project 1
+
+{{ self.title() }}
+    Project 1
+
+{% block content %}
+<div class="col-md-12 col-lg-12">
+    <div class="white-box bg-theme m-b-0">
+        <div class="city-weather-widget">
+            <h1>{{ result.location.name}}</h1>
+            <h4>Latitude: {{result.location.lat}} Longitude: {{result.location.lon}}, {{date}}</h4>
+            <div class="row p-t-30">
+                <div class="col-sm-6">
+                    <ul class="side-icon-text">
+                        <li><span class="di vm"><i class="wi wi-day-hail"></i></span>
+                            <div class="di vm">
+                                <h1 class="m-b-0">{{'%0.1f'|format(celcius|float)}}<sup>o</sup> Celcius</h1>
+                                {% for weather in result.current %}
+                                    <h5 class="m-t-0">{{weather.description}}</h5>
+                                {% endfor %}
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-6">
+                    <ul class="list-icons pull-right text-white">
+                        <li><i class="wi wi-day-sunny m-r-5"></i>Kelembaban {{result.current.humidity}}%</li>
+                        <li><i class=" wi wi-day-windy m-r-5"></i>Angin {{result.current.wind_mph}}%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

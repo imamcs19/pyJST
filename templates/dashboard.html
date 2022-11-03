@@ -1,0 +1,52 @@
+{% extends "extends/base.html" %}
+{% block title %}
+    <title>FGA Big Data Using Python</title>
+{% endblock title %}
+{{ self.title() }}
+    Home
+{{ self.title() }}
+<button onclick="window.location.href='/'" class="btn btn-outline btn-rounded btn-info">
+    <i class="ti-arrow-left m-l-5"></i>
+    <span>Back Home</span>
+</button> Project 1
+
+{{ self.title() }}
+    Project 1
+
+{% block content %}
+<a href="/upload">
+    <span style="display: block;">
+        Upload File
+    </span>
+</a>
+
+<table class="table table-hover" data-height="10" table-bordered">
+  <thead>
+    <tr>
+      <th style="width: 10px">No</th>
+      <th>Nama File</th>
+      <th colspan="2" style="width: 40px">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in header %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{item[0]}}</td>
+      <td>
+        <a href="/unduh/file/?name={{item[0]}}">
+          <button type="submit" class="btn btn-primary moss-3">Unduh</button>
+        </a>
+      </td>
+      <td>
+        <a href="/hapus/file/?name={{item[0]}}">
+          <button type="submit" class="btn btn-primary moss-3">Hapus</button>
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock content %}

@@ -1,0 +1,60 @@
+{% extends "extends/base.html" %}
+{% block title %}
+    <title>Design Social Ergonomics Tools Using Python</title>
+{% endblock title %}
+{{ self.title() }}
+    Home
+{{ self.title() }}
+<button onclick="window.location.href='/'" class="btn btn-outline btn-rounded btn-info">
+    <i class="ti-arrow-left m-l-5"></i>
+    <span>Back Home</span>
+</button> Project 1
+
+{{ self.title() }}
+    Project 1
+
+{% block content %}
+
+        <h1>Simple type | Scan for Check-Up Environment State 😊🚀🤝👍:</h1>
+
+        <h2>&lt;img src="&#123;&#123; qrcode("Are the current environmental conditions safe?") &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("Do you speak QR?") }}">
+
+        <h1>Shape type | Scan for Check-Up Environment State::</h1>
+
+        <h2>&lt;img src="&#123;&#123; qrcode("Please tell us about the current environmental conditions!", box_size=20) &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("I'm bigger than you!", box_size=20) }}">
+
+        <h2>&lt;img src="&#123;&#123; qrcode("Whatever... can't touch me", border=10) &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("Whatever... can't touch me", border=10) }}">
+        <br>
+
+        <h1>Some QR specific examples:</h1>
+
+        <h2>&lt;img src="&#123;&#123; qrcode("You can read me even if I'm 30% hurt.", error_correction='H') &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("You can read me even if I'm 30% hurt.", error_correction='H') }}">
+        <br>
+
+        <h1>A combo example:</h1>
+
+        <h2>&lt;img src="&#123;&#123; qrcode("FATALITY", box_size=12, border=5) &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("FATALITY", box_size=12, border=5) }}">
+
+        <h1>A color QR example:</h1>
+
+        <h2>&lt;img src="&#123;&#123; qrcode("You can see green front color and #CCC back color.", error_correction='H', back_color='ccc', fill_color='green') &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("You can see green front color and #CCC back color.", error_correction='H', back_color='ccc', fill_color='green') }}">
+        <br>
+
+        <h1>A icon image QR example:</h1>
+
+        <h2>&lt;img src="&#123;&#123; qrcode("You can see a icon in QR code.", error_correction='H', icon_img='https://raw.githubusercontent.com/imamcs19/FGA-Big-Data-Using-Python-Filkom-x-Mipa-UB-2022/main/static/img/goku.png') &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("You can see a icon in QR code.", error_correction='H', icon_img='https://raw.githubusercontent.com/imamcs19/FGA-Big-Data-Using-Python-Filkom-x-Mipa-UB-2022/main/static/img/goku.png') }}">
+        <br>
+
+        <h1>A icon image QR example (local):</h1>
+
+        <h2>&lt;img src="&#123;&#123; qrcode("Load icon image from static folder.", error_correction='H', icon_img='img/filkom.png') &#125;&#125;"&gt;</h2>
+            <img src="{{ qrcode("Load icon image from static folder.", error_correction='H', icon_img='img/filkom.png') }}">
+        <br>
+{% endblock content %}

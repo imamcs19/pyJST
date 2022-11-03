@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/css_qrcode/style.css') }}">
+  <title>Attendance QR-Code</title>
+</head>
+<body>
+<h2>Attendance Application with QR Code Scan using Flask Python 3</h2>
+  <a href="/qr_index"><button>SCAN ATTENDANCE</button></a><br>
+  <p style="text-align:center"><img id="video" src="{{ url_for('qr_scan') }}" width="640" height="480"></p>
+
+<div class="display-cover">
+    <video autoplay></video>
+    <canvas class="d-none"></canvas>
+
+    <div class="video-options">
+        <select name="" id="" class="custom-select">
+            <option value="">Select camera</option>
+        </select>
+    </div>
+
+    <img class="screenshot-image d-none" alt="">
+    <!--<img class="screenshot-image d-none" alt="" id="video" src="{{ url_for('qr_scan') }}">-->
+
+    <div class="controls">
+        <button class="btn btn-danger play" title="Play"><i data-feather="play-circle"></i></button>
+        <button class="btn btn-info pause d-none" title="Pause"><i data-feather="pause"></i></button>
+        <button class="btn btn-outline-success screenshot d-none" title="ScreenShot"><i data-feather="image"></i></button>
+    </div>
+</div>
+
+
+<!--unpkg is a fast, global content delivery network (atau ada yang dalam bentuk cdn) for everything on npm atau web package lainnya. -->
+<!--Use it to quickly and easily load any file from any package using a URL like:-->
+<!--unpkg.com/:package@:version/:file-->
+
+<script src="https://unpkg.com/feather-icons"></script>
+<!--https://unpkg.com/feather-icons-->
+<script src="{{ url_for('static', filename = 'js/mylib_qrcode/script.js') }}"></script>
+
+
+<br><br>
+<table border="1">
+    <tr>
+        <th>No</th>
+        <th>Identity Number</th>
+        <th>Name</th>
+        <th>Attendance</th>
+    </tr>
+    {% for no, x in data %}
+        <tr>
+            <td>{{ no }}</td>
+            <td>{{ x.student.nim }}</td>
+            <td>{{ x.student.name }}</td>
+            <td>{{ x.time }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

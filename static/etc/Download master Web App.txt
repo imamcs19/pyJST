@@ -1,0 +1,15 @@
+Cara ke-1:
+1. Link download File Master webapp DAA Kelas H, ketikkan
+—---------------
+$ git clone https://github.com/imamcs19/pyDAA.git
+
+2. Lalu ketikkan 
+------------------
+$mv ./pyDAA/* ./mysite
+, lalu tekan Reload
+
+3. pip install -r ./mysite/requirements.txt
+
+4. coba masuk ke halaman Web App Anda, misal pada https://userAnda.pythonanywhere.com
+
+5. Selesai :D

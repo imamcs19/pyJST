@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css?family=Concert+One');
+
+.loading-view {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index:100;
+	width:100vw;
+	height:100vh;
+	overflow-x: scroll;
+    white-space: nowrap;
+
+}
+
+.loading-view #fetching {
+	font-family: "Concert One", sans-serif;
+	position:absolute;
+	left:50%;
+	transform: translate(-50%, -50%);
+
+}
+
+.loading-view img {
+	width:25vw;
+	position:absolute;
+	left:50%;
+	transform: translate(-50%, -50%);
+	z-index: -1;
+	padding-top:20%;
+}
+
+.heading-twit{
+	font-family: "Concert One", sans-serif;
+	text-align: center;
+}
+
+.heading-twit h1 {
+	margin:0;
+}
+
+
+body.loading {
+	overflow: hidden;
+}
+
+body.loading .loading-view {
+	display: block;
+}
+
+#error {
+	font-family: "Concert One", sans-serif;
+	font-size: 5vw;
+	z-index: 201;
+	background-color: rgba(0, 0, 0, 0.2);
+	width:100vw;
+	height: 100vh;
+	text-align: center;
+	vertical-align: middle;
+	line-height: 100vh;
+	position:fixed;
+	float:left;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%, -50%);
+	display:none;
+}
+
+body.error {
+	overflow: hidden;
+}
+
+body.error #error {
+	display: block;
+}
+
+.data {
+	font-family: "Concert One", sans-serif;
+	 -moz-text-shadow: 4px 5px 20px rgba(100, 100, 115, 0.5);
+	text-shadow:4px 5px 20px rgba(100, 100, 115, 0.5);
+}
+
+
+#disclaimer-sign, #help-sign {
+	font-family: "Concert One", sans-serif;
+	font-size: 5vh;
+	z-index: 200;
+	position:fixed;
+}
+
+#disclaimer-text, #help-text {
+	font-family: "Concert One", sans-serif;
+	font-size: 2vh;
+	background-color: rgba(0, 0, 0, 0.7);
+	color:white;
+	text-align: center;
+	visibility: hidden;
+	z-index: 200;
+	position:fixed;
+	margin: 2vh;
+	width:40vh;
+	height:auto;
+
+}
+
+#disclaimer-sign {
+	bottom:1vh;
+	left:1vh;
+}
+
+
+#disclaimer-text {
+	bottom:0;
+	left:2vh;
+}
+
+#disclaimer-sign:hover + #disclaimer-text {
+	visibility: visible;
+
+}
+
+#help-sign {
+	top:0;
+	right:1vh;
+}
+
+#help-text {
+	top:0;
+	right:2vh;
+}
+
+#help-sign:hover + #help-text {
+	visibility: visible;
+
+}
+
+a {
+	position:fixed;
+	bottom:1vh;
+	right:1vh;
+	z-index: 200;
+}
+

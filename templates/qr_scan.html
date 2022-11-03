@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance QR-Code</title>
+</head>
+<body>
+<h2>Attendance Application with QR Code Scan using Flask Python 3</h2>
+  <a href="/qr_index"><button>SCAN ATTENDANCE</button></a><br>
+  <img id="video" src="{{ url_for('qr_scan') }}" width="640" height="480">
+<br><br>
+<table border="1">
+    <tr>
+        <th>No</th>
+        <th>Identity Number</th>
+        <th>Name</th>
+        <th>Attendance</th>
+    </tr>
+    {% for no, x in data %}
+        <tr>
+            <td>{{ no }}</td>
+            <td>{{ x.student.nim }}</td>
+            <td>{{ x.student.name }}</td>
+            <td>{{ x.time }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

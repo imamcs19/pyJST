@@ -1,0 +1,30 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav slimscrollsidebar">
+        <div class="sidebar-head">
+            <h3><span class="fa-fw open-close"><i class="ti-menu hidden-xs"></i><i class="ti-close visible-xs"></i></span> <span class="hide-menu">Menu</span></h3> </div>
+        <ul class="nav" id="side-menu">
+            <li class="user-pro">
+                <a href="#" class="waves-effect"><img src="{{ url_for('static', filename = 'img/guest.png') }}" alt="user-img" class="img-circle"> <span class="hide-menu"> {{session['name']}}<span class="fa arrow"></span></span>
+                </a>
+                <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
+                    <li><a href="javascript:void(0)"><i class="ti-user"></i> <span class="hide-menu">My Profile</span></a></li>
+                    <li><a href="/logout"><i class="fa fa-power-off"></i> <span class="hide-menu">Logout</span></a></li>
+                </ul>
+            </li>
+            <li class="devider"></li>
+            <li> <a href="launchpad_menu" class="waves-effect"><i class="mdi mdi-numeric-0-box-multiple-outline fa-fw"></i><span class="hide-menu">Menu</span></a> </li>
+            <li> <a href="week1" class="waves-effect"><i class="mdi mdi-numeric-1-box-multiple-outline fa-fw" data-icon="v"></i> <span class="hide-menu"> Week 1 <span class="fa arrow"></span> <span class="label label-rouded label-inverse pull-right">2</span></span></a>
+                <ul class="nav nav-second-level">
+                    <li> <a href="week11"><i class=" fa-fw">1</i><span class="hide-menu">Task 1</span></a> </li>
+                    <li> <a href="week12"><i class=" fa-fw">2</i><span class="hide-menu">Task 2</span></a> </li>
+                </ul>
+            </li>
+            <li> <a href="week2" class="waves-effect"><i class="mdi mdi-numeric-2-box-multiple-outline fa-fw"></i><span class="hide-menu">Week 2</span></a> </li>
+            <li> <a href="week3" class="waves-effect"><i class="mdi mdi-numeric-3-box-multiple-outline fa-fw"></i><span class="hide-menu">Week 3</span></a> </li>
+            <li> <a href="week4" class="waves-effect"><i class="mdi mdi-numeric-4-box-multiple-outline fa-fw"></i><span class="hide-menu">Week 4</span></a> </li>
+            <li> <a href="week5" class="waves-effect"><i class="mdi mdi-numeric-5-box-multiple-outline fa-fw"></i><span class="hide-menu">Week 5</span></a> </li>
+            <li> <a href="week6" class="waves-effect"><i class="mdi mdi-numeric-6-box-multiple-outline fa-fw"></i><span class="hide-menu">Week 6</span></a> </li>
+            <li> <a href="week7" class="waves-effect"><i class="mdi mdi-numeric-7-box-multiple-outline fa-fw"></i><span class="hide-menu">Week 7</span></a> </li>
+        </ul>
+    </div>
+</div>

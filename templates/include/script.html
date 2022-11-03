@@ -1,0 +1,103 @@
+<!-- Jquery JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.min.js') }}"></script>
+<!-- Jquery JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.sparkline.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/script.js') }}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
+<!-- Menu Plugin JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/sidebar-nav.min.js') }}"></script>
+<!--slimscroll JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.slimscroll.js') }}"></script>
+<!--Wave Effects -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/waves.js') }}"></script>
+<!--Morris JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/raphael-min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/morris.js') }}"></script>
+<!-- chartist chart -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/chartist.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/chartist-plugin-tooltip.min.js') }}"></script>
+<!-- Calendar JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/moment.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/fullcalendar.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/cal-init.js') }}"></script>
+<!-- Custom Theme JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/custom.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/dashboard1.js') }}"></script>
+<!-- Custom tab JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/cbpFWTabs.js') }}"></script>
+<script type="text/javascript" >
+(function() {
+    [].slice.call(document.querySelectorAll('.sttabs')).forEach(function(el) {
+        new CBPFWTabs(el);
+    });
+})();
+</script>
+<!-- Toast JavaScript -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.toast.js') }}"></script>
+<!--Style Switcher -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jQuery.style.switcher.js') }}"></script>
+<!--File Upload -->
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/jasny-bootstrap.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/highcharts.js') }}"></script>
+<script>
+Highcharts.chart('hasilGrafik', {
+    chart: {
+        type: 'spline'
+    },
+    
+    title: {
+        text: 'Hasil Prediksi'
+    },
+
+    xAxis: {
+        title: {
+            text: 'Data ke-'
+        }
+    },
+
+    yAxis: {
+        title: {
+            text: 'Variabel Y (..)'
+        }
+    },
+
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+    },
+
+    plotOptions: {
+        series: {
+            label: {
+                connectorAllowed: false
+            }
+        }
+    },
+
+    series: [{
+        name: 'Y Aktual',
+        data:  {{ y_aktual }}
+    }, {
+        name: 'Y Prediksi',
+        data: {{ y_prediksi }}
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                }
+            }
+        }]
+    }
+
+});
+</script>

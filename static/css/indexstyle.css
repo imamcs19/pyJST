@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Archivo Black', sans-serif;
+}
+html, body {
+    scroll-behavior: smooth;
+    /* background-image: url("../img/5.jpg");
+    background-position: 0 -180px;   */
+    background-size: cover;
+    font-family: 'Archivo Black', sans-serif;
+}
+h1{
+    display: flex;
+    justify-content: center;
+}
+.mycontainer{
+    font-size: 50px;    
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.mycontainer button{
+ 
+    padding: 15px 35px;
+    font-size: 17px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: whitesmoke;
+    margin-top: 15px;
+    box-shadow: 0 9px rgb(47, 116, 50);
+}
+.mycontainer button:hover{
+    background-color:#3e8e41;
+}
+.mycontainer button:active{
+    background-color: #3e8e41;
+  box-shadow: 0 3px #666;
+  transform: translateY(6px);
+}
+.slide{
+    overflow: hidden;
+    max-height: 700px;
+    position: relative;
+}
+.slide figure{
+    position: relative;
+    width: 500%;
+    left: 0;
+    animation: 50s slide infinite;
+}
+.slide figure img{
+    float: left;
+    width: 20%;
+    height: auto;
+    opacity: 0.35;
+}
+@keyframes slide{
+    0%{
+        left: 0;
+    }
+    20%{
+        left: 0;
+    }
+    25%{
+        left: -100%;
+    }
+    45%{
+        left: -100%;
+    }
+    50%{
+        left: -200%;
+    }
+    70%{
+        left: -200%;
+    }
+    75%{
+        left: -300%;
+    }
+    95%{
+        left: -300%;
+    }
+    100%{
+        left: -400%;
+    }
+}

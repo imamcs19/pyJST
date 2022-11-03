@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    {% block title %}{% endblock title %}
+    {% include "include/link.html" %}
+</head>
+<body>
+    <!-- {% include "include/preloader.html" %} -->
+    <div id="wrapper">
+        {% include "include/top_header.html" %}
+        {% include "include/left_sidebar.html" %}
+        <!-- ============================================================== -->
+        <!-- Page Content -->
+        <!-- ============================================================== -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row bg-title">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                        <h4 class="page-title">{{ self.title() }}</h4>
+                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+                       <ol class="breadcrumb">
+                            <li><a href="#">{{ self.title() }}</a></li>
+                            <li class="active">{{ self.title() }}</li>
+                        </ol>
+                    </div>
+                </div>
+                {% block content %}{% endblock content %}
+            </div>
+            <!-- /.container-fluid -->
+            {% include "include/footer.html" %}
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page Content -->
+        <!-- ============================================================== -->
+    </div>
+</body>
+{% include "include/script.html" %}
+</html>

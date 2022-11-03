@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Archivo Black', sans-serif;
+}
+html, body {
+    scroll-behavior: smooth;
+    background-image: url("../img/1_thank_to_heaven_josiah.jpg");
+    background-size: cover;
+    font-family: 'Archivo Black', sans-serif;
+}
+h1{
+    display: flex;
+    justify-content: center;
+}
+.mycontainer{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    border-radius: 15px;
+    padding: 30px 40px 30px 40px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    background-color: rgba(215, 213, 235, 0.6);
+}

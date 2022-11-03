@@ -1,0 +1,31 @@
+
+    {% block content %}
+    <h1>
+        List of My Projects
+    </h1>
+
+    <ol>
+        <li>
+            <a href = "life-calc">Life Calculator</a>
+        </li>
+        <li>
+            <a href = "text-game">Adventure Game</a>
+        </li>
+        <li>
+            <a href = "fill-it-up">Fill It Up</a>
+        </li>
+        <li>
+            <a href = "rock-paper-scissors">Rock Paper Scissors</a>
+        </li>
+        <li>
+            <a href = "bubble-popper">Bubble Popper</a>
+        </li>
+    </ol>
+    <p>test section below</p>
+    <ol>
+        {% for key, value in projects.items() %}
+        <li><a href={{value['url']}}>{{value['title']}}</a></li>
+        {% endfor %}
+    </ol>
+{% endblock content %}
+

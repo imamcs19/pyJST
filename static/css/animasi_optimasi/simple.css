@@ -1,0 +1,34 @@
+body {
+    font-family: sans-serif;
+}
+
+input {
+    width: 56px;
+}
+
+.app {
+    width: 602px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#out_best {
+    width: 350px;
+}
+
+canvas {
+    border: 1px solid #888888;
+    margin-bottom: 20px;
+}
+
+button {
+    width: 96px;
+}
+
+.desc {
+    font-size: small;
+}
+
+td:first-child {
+    min-width: 170px;
+}

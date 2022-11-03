@@ -1,0 +1,36 @@
+{% extends "extends/base.html" %}
+{% block title %}
+    <title>Web App DAA Dgn Python</title>
+{% endblock title %}
+{{ self.title() }}
+    Home
+{{ self.title() }}
+<button onclick="window.location.href='/'" class="btn btn-outline btn-rounded btn-info">
+    <i class="ti-arrow-left m-l-5"></i>
+    <span>Back Home</span>
+</button> Project 1
+
+{{ self.title() }}
+    Project 1
+
+{% block content %}
+
+<!DOCTYPE html>
+<!--<html>-->
+<!--<head>-->
+	<!--<title>500</title>-->
+	<!-- favicon found online -->
+	<!--<link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">-->
+	<!--<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/twit/error.css') }}"/>-->
+<!--</head>-->
+<!--<body>-->
+
+	<div>
+		<p>Terdapat trouble pada koding atau cek koneksi ke server. </p>
+		<p>Silahkan cek kembali.</p>
+	</div>
+
+<!--</body>-->
+<!--</html>-->
+
+{% endblock content %}

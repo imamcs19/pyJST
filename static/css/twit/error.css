@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Concert+One');
+
+body {
+	background-image: url("https://wallpaperscraft.com/image/twitter_logo_bird_social_network_66727_2048x1152.jpg");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+}
+
+div {
+	font-family: "Concert One", sans-serif;
+	font-size: 15vh;
+	position:absolute;
+	text-align: center;
+	top: 50%;
+	left:50%;
+	transform: translate(-50%, -50%);
+}
+
+div p {
+	margin:0;
+}
