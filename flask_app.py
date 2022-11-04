@@ -104,17 +104,173 @@ Z_z = FrameWeb_bawah
 
 @app.route('/som', methods=['GET'])
 def som():
-    # ref: 
+    # ref:
     # [0] https://towardsdatascience.com/understanding-self-organising-map-neural-network-with-python-code-7a77f501e985
-    
-    # a = 12
-    # b = 7
-    # return str(a+b)
+    # [1] ..
 
-    import time
     import os.path
 
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    # 1. import lib.
+    import numpy as np
+    from numpy.ma.core import ceil
+    from scipy.spatial import distance #distance calculation
+    from sklearn.preprocessing import MinMaxScaler #normalisation
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score #scoring
+    from sklearn.metrics import confusion_matrix
+    import matplotlib.pyplot as plt
+    from matplotlib import animation, colors
+
+    # 2. Import dataset
+    # banknote authentication Data Set
+    # https://archive.ics.uci.edu/ml/datasets/banknote+authentication
+    # Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml].
+    # Irvine, CA: University of California, School of Information and Computer Science.
+
+    # cara download, ketikkan pada bash
+    # $ wget https://raw.githubusercontent.com/matbesancon/BankNotes/master/data_banknote_authentication.txt
+    # $ mv data_banknote_authentication.txt mysite/
+
+    # data_file = "data_banknote_authentication.txt"
+    data_file = os.path.join(BASE_DIR, "data_banknote_authentication.txt")
+    data_x = np.loadtxt(data_file, delimiter=",", skiprows=0, usecols=range(0,4) ,dtype=np.float64)
+    data_y = np.loadtxt(data_file, delimiter=",", skiprows=0, usecols=(4,),dtype=np.int64)
+
+    # 3. Training and testing data split
+    # The data is split for training and testing at 0.8:0.2.
+    # atau dengan jumlah 1097 : 275
+    # train and test split
+    train_x, test_x, train_y, test_y = train_test_split(data_x, data_y, test_size=0.2, random_state=42)
+    print(train_x.shape, train_y.shape, test_x.shape, test_y.shape) # check the shapes
+
+    # 4. Helper functions
+    # Data Normalisation
+    def minmax_scaler(data):
+      scaler = MinMaxScaler()
+      scaled = scaler.fit_transform(data)
+      return scaled
+
+    # Euclidean distance
+    def e_distance(x,y):
+      return distance.euclidean(x,y)
+
+    # Manhattan distance
+    def m_distance(x,y):
+      return distance.cityblock(x,y)
+
+    # Best Matching Unit search
+    def winning_neuron(data, t, som, num_rows, num_cols):
+      winner = [0,0]
+      shortest_distance = np.sqrt(data.shape[1]) # initialise with max distance
+      input_data = data[t]
+      for row in range(num_rows):
+        for col in range(num_cols):
+          distance = e_distance(som[row][col], data[t])
+          if distance < shortest_distance:
+            shortest_distance = distance
+            winner = [row,col]
+      return winner
+
+    # Learning rate and neighbourhood range calculation
+    def decay(step, max_steps,max_learning_rate,max_m_dsitance):
+      coefficient = 1.0 - (np.float64(step)/max_steps)
+      learning_rate = coefficient*max_learning_rate
+      neighbourhood_range = ceil(coefficient * max_m_dsitance)
+      return learning_rate, neighbourhood_range
+
+
+    # 5. Hyperparameters
+    # grid (10*10) dari num_rows x num_cols
+    num_rows = 10
+    num_cols = 10
+    max_m_dsitance = 4
+    max_learning_rate = 0.5
+    # max_steps = int(7.5*10e3)
+    max_steps = 100
+
+    # num_nurons = 5*np.sqrt(train_x.shape[0])
+    # grid_size = ceil(np.sqrt(num_nurons))
+    # print(grid_size)
+
+    # 6. Training
+    #mian function
+    train_x_norm = minmax_scaler(train_x) # normalisation
+
+    # initialising self-organising map
+    num_dims = train_x_norm.shape[1] # numnber of dimensions in the input data
+    np.random.seed(40)
+    som = np.random.random_sample(size=(num_rows, num_cols, num_dims)) # map construction
+
+    # start training iterations
+    for step in range(max_steps):
+      if (step+1) % 1000 == 0:
+        print("Iteration: ", step+1) # print out the current iteration for every 1k
+      learning_rate, neighbourhood_range = decay(step, max_steps,max_learning_rate,max_m_dsitance)
+
+      t = np.random.randint(0,high=train_x_norm.shape[0]) # random index of traing data
+      winner = winning_neuron(train_x_norm, t, som, num_rows, num_cols)
+      for row in range(num_rows):
+        for col in range(num_cols):
+          if m_distance([row,col],winner) <= neighbourhood_range:
+            som[row][col] += learning_rate*(train_x_norm[t]-som[row][col]) #update neighbour's weight
+
+    print("SOM training completed")
+
+    # 7. Show labels to the trained SOM
+    # collecting labels
+    label_data = train_y
+    map = np.empty(shape=(num_rows, num_cols), dtype=object)
+
+    for row in range(num_rows):
+      for col in range(num_cols):
+        map[row][col] = [] # empty list to store the label
+
+    for t in range(train_x_norm.shape[0]):
+      if (t+1) % 1000 == 0:
+        print("sample data: ", t+1)
+      winner = winning_neuron(train_x_norm, t, som, num_rows, num_cols)
+      map[winner[0]][winner[1]].append(label_data[t]) # label of winning neuron
+
+
+    # construct label map
+    label_map = np.zeros(shape=(num_rows, num_cols),dtype=np.int64)
+    for row in range(num_rows):
+      for col in range(num_cols):
+        label_list = map[row][col]
+        if len(label_list)==0:
+          label = 2
+        else:
+          label = max(label_list, key=label_list.count)
+        label_map[row][col] = label
+
+    title = ('Iteration ' + str(max_steps))
+    cmap = colors.ListedColormap(['tab:green', 'tab:red', 'tab:orange'])
+    plt.imshow(label_map, cmap=cmap)
+    plt.colorbar()
+    plt.title(title)
+    plt.show()
+
+    # 8. Predicting the test set labels
+    # test data
+    # using the trained som, search the winning node of corresponding to the test data
+    # get the label of the winning node
+
+    data = minmax_scaler(test_x) # normalisation
+
+    winner_labels = []
+
+    for t in range(data.shape[0]):
+     winner = winning_neuron(data, t, som, num_rows, num_cols)
+     row = winner[0]
+     col = winner[1]
+     predicted = label_map[row][col]
+     winner_labels.append(predicted)
+
+    # print("Accuracy: ",accuracy_score(test_y, np.array(winner_labels)))
+
+
 
     template_view = '''
             <!--- <html> --->
@@ -123,116 +279,46 @@ def som():
             <!--- <body> --->
             <h2>
                 <p style="text-decoration: underline;">
-                  Log Analisis Algoritma Timsort dgn Timer:
+                  Implementasi Algoritma SOM:
                 </p>
             </h2>
                   <form method="post">
-                   {%for data_get in data_sblm_stlh %}
-                    Input Size (N) = {{ loop.index }}
+                    Data Y test Aktual: <br>
+                    {{ test_y_aktual }}
                     <br>
-                    Data Sebelum di-Sorting: <br>
-                    {{ data_get[0] }}
-                    <br>
-                    Data Setelah di-Sorting: <br>
-                    {{ data_get[1] }}
+                    Data Y hasil Predik: <br>
+                    {{ test_y_predik }}
                     <br><br>
-                   {%endfor%}
-                  </form>
-                  <h2>Hasil:  </h2>
-                  {% for data_hasil in hasil  %}
-                    {{ data_hasil }}
-                    <br>
-                  {% endfor %}
 
-                  <h2>Plot Waktu by Timer:  </h2>
+                  </form>
+                  <h2>Hasil Nilai Evaluasi:  </h2>
+                    {{ nilai_eval }}
+                    <br>
+
+                  <h2>Plot Hasil SOM:  </h2>
                   <img src={{url_image}} alt="Chart" height="480" width="640">
-                  <br>
-                  <img src={{image_timer}} alt="Chart" height="480" width="640">
 
             <!--- </body> --->
             <!--- </html> --->
         '''
 
-
-    input_size = 10
-    array_waktu_dalam_detik = np.zeros([input_size,2])
-    data_sblm_sort = []
-    data_stlh_sort = []
-    for i in range(input_size):
-        randomData = random.sample(range(0, 1000), (i+1))
-        data_sblm_sort.append(listToString(randomData))
-        start_time = time.time()
-        listData = randomData
-
-        # print(f'Data sebelum sorted : {stringToFloat}')
-        timSort(listData) # bisa diganti dengan fibo/ unique element
-        # print(f'Data setelah sorted : {listData}')
-
-        y = (len(listData)) - 1
-
-        end_time = time.time()
-        elapsed_time = end_time - start_time
-
-        data_stlh_sort.append(listToString(listData))
-
-
-        # print('Waktu dengan Timer (detik): ', elapsed_time, ' vs Waktu dengan T(n) = ',(i+1), 'Log (',(i+1),'): ', (i+1)*np.log2(i+1))
-        np.set_printoptions(suppress=True)
-        array_waktu_dalam_detik[i][0] = round((i+1),0)
-        array_waktu_dalam_detik[i][1] = round(elapsed_time,6)
-        #print()
-
-        hasil = []
-        for idx, time_val in enumerate(list(array_waktu_dalam_detik[:,1])):
-            hasil.append('Input Size (N) = ' + str(idx+1) + ', dgn waktu  ' +str('{0:.10f}'.format(time_val)) + ' (detik)')
-
-    # plot hasil waktunya
-    n=list(range(1,input_size+1))
-
-    # Cara ke-1
-    # Generate plot
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    axis.set_title("Plot Waktu by Timer Alg. Timsort")
-    axis.set_xlabel("Banyak Data (N)")
-    axis.set_ylabel("Waktu Komputasi")
-    axis.grid()
-    axis.plot(n, [x*math.log(x,2) for x in n], 'r.-', label='TimSort by T(n)')
-    axis.plot(n,list(array_waktu_dalam_detik[:,1][:len(n)]), 'go-', label='TimSort by Timer')
-    # axis.plot(range(5), range(5), "ro-")
-
-    # legend = axis.legend(loc='upper center', shadow=True, fontsize='x-large')
-
-    # # Put a nicer background color on the legend.
-    # legend.get_frame().set_facecolor('C0')
-
-    axis.legend(loc="upper left")
-
-    # Convert plot to PNG image
-    pngImage = io.BytesIO()
-    FigureCanvas(fig).print_png(pngImage)
-
-    # Encode PNG image to base64 string
-    pngImageB64String = "data:image/png;base64,"
-    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
-
     # Cara ke-2
     # simpan dalam path + nama file /static/img/new_timer.png
-    url_simpan = "static/img/new_timer.png"
+    url_simpan = "static/img/new_gambar.png"
 
     fig = plt.figure()
-    # plt.plot(n, [math.log(x,2) for x in n], 'g.-', label='logN') # logN
-    # plt.plot(n, n, 'b.-', label='N') # N
-    plt.plot(n, [x*math.log(x,2) for x in n], 'r.-', label='TimSort by T(n)') # NlogN
-    # plt.plot(n, [x*x for x in n], 'r.-') # N^2
-    # plt.plot(n, [x*x*x for x in n], 'r.-') # N^3
-    # plt.plot(n, [math.pow(2,x) for x in n], 'r.-') # 2^N
-    # plt.plot(n, [math.factorial(x) for x in n], 'r.-') # N!
-    plt.plot(n,list(array_waktu_dalam_detik[:,1][:len(n)]), 'g.-', label='TimSort by Timer') # TimSort
+    # plt.plot(n, [x*math.log(x,2) for x in n], 'r.-', label='TimSort by T(n)') # NlogN
+    # plt.plot(n,list(array_waktu_dalam_detik[:,1][:len(n)]), 'g.-', label='TimSort by Timer') # TimSort
 
-    plt.xlabel('Banyak Data (N)')
-    plt.ylabel('Waktu Komputasi')
-    plt.legend(loc="upper left")
+    title = ('Iteration ' + str(max_steps))
+    cmap = colors.ListedColormap(['tab:green', 'tab:red', 'tab:orange'])
+    plt.imshow(label_map, cmap=cmap)
+    plt.colorbar()
+    plt.title(title)
+
+    # plt.xlabel('Banyak Data (N)')
+    # plt.ylabel('Waktu Komputasi')
+    # plt.legend(loc="upper left")
     plt.show()
 
     url_file_image_simpan = os.path.join(BASE_DIR, url_simpan)
@@ -241,9 +327,12 @@ def som():
     # Cara ke-3
     # /bokeh
 
+    nilai_eval = accuracy_score(test_y, np.array(winner_labels))
+
 
     # return hasil
-    return render_template_string(A_a+template_view+Z_z, data_sblm_stlh = zip(data_sblm_sort, data_stlh_sort), hasil = hasil, image_timer = pngImageB64String, url_image = url_simpan)
+    # return render_template_string(A_a+template_view+Z_z, y_aktual_n_y_predik = zip(test_y, np.array(winner_labels)), nilai_eval = nilai_eval, url_image = url_simpan)
+    return render_template_string(A_a+template_view+Z_z, test_y_aktual = test_y, test_y_predik = np.array(winner_labels), nilai_eval = nilai_eval, url_image = url_simpan)
 
 @app.route('/bokeh')
 def bokeh():
