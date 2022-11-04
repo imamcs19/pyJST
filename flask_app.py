@@ -131,10 +131,10 @@ def som():
 
     # cara download, ketikkan pada bash
     # $ wget https://raw.githubusercontent.com/matbesancon/BankNotes/master/data_banknote_authentication.txt
-    # $ mv data_banknote_authentication.txt mysite/
+    # $ mv data_banknote_authentication.txt mysite/static/data_contoh
 
     # data_file = "data_banknote_authentication.txt"
-    data_file = os.path.join(BASE_DIR, "data_banknote_authentication.txt")
+    data_file = os.path.join(BASE_DIR, "static/data_contoh/data_banknote_authentication.txt")
     data_x = np.loadtxt(data_file, delimiter=",", skiprows=0, usecols=range(0,4) ,dtype=np.float64)
     data_y = np.loadtxt(data_file, delimiter=",", skiprows=0, usecols=(4,),dtype=np.int64)
 
