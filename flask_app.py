@@ -1223,6 +1223,603 @@ def scanner():
         else:
             break
 
+
+@app.route("/my_async2", methods=['GET','POST'])
+def my_async2():
+    # ref.:
+    # [0] https://github.com/adrianton3/pso.js/tree/master/examples/async
+
+    template_view = '''
+            <!--- <!DOCTYPE html> --->
+            <!--- <html> --->
+            <!--- <head lang="en"> --->
+            <!---	<meta charset="UTF-8"> --->
+            <!---	<link rel="stylesheet" href="async.css"> --->
+            <!---	<title>Async - pso.js demo</title> --->
+            <!---</head> --->
+
+
+            	<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_async/pso.js') }}"></script>
+            	<script>
+            	function init() {
+                	   'use strict';
+
+                	//function async(){
+
+                    	var outTextarea = document.getElementById('out');
+
+                    	function log(text) {
+                    		outTextarea.value += text;
+                    	}
+
+
+                    	var optimizer = new pso.Optimizer();
+
+                    	optimizer.setObjectiveFunction(function (x, done) {
+                    		setTimeout(function () {
+                    			log('x');
+                    			done(-Math.pow(x[0], 2));
+                    		}, Math.random() * 800 + 20);
+                    	}, {
+                    		async: true
+                    	});
+
+                    	var initialPopulationSize = 20;
+                    	var domain = [new pso.Interval(-5, 5)];
+
+                    	optimizer.init(initialPopulationSize, domain);
+
+                    	var iterations = 0, maxIterations = 10;
+
+                    	function loop() {
+                    		if (iterations >= maxIterations) {
+                    			log([
+                    				'\n--- ---\nOptimasi selesai',
+                    				'Nilai terbaik yang didapatkan f(x): ' + optimizer.getBestFitness(),
+                    				'dengan x = ' + optimizer.getBestPosition()[0]
+                    			].join('\n'));
+                    		} else {
+                    			iterations++;
+                    			log('\nIterasi ke - ' + iterations + ' dari ' + maxIterations + ' ');
+                    			optimizer.step(loop);
+                    		}
+                    	}
+
+                    	log('Mulai melakukan proses optimasi');
+                    	loop();
+                   }
+             </script>
+
+             <body onload="init()">
+
+            	<div class="app">
+            		<p class="desc">
+            			Mencari nilai x yang dapat memaksimalkan fungsi tujuan atau objective function <code>f(x) = -x^2, di mana x dalam interval [-5, 5]</code>.
+            			Fungsi objektif tersebut dilakukan returns secara asynchron melalui penggunakan
+            			<code>setTimeout</code> dengan nilai random kecil sebagai timeout.
+            			Di mana setiap nilai yang ditelusuri <code>x</code> merepresentasikan pemanggilan objective function.
+            		</p>
+            		<div class="small"><b>Detail hasil proses iterasi (Real-time):</b></div>
+            		<textarea id="out" rows="16" cols="80"></textarea>
+            	</div>
+
+            </body>
+            <!--- </html> --->
+
+        '''
+
+    return render_template_string(A_a+template_view+Z_z)
+
+@app.route("/my_async", methods=['GET','POST'])
+def my_async():
+    # ref.:
+    # [0] https://github.com/adrianton3/pso.js/tree/master/examples/async
+
+    template_view = '''
+            <!--- <!DOCTYPE html> --->
+            <!--- <html> --->
+            <!--- <head lang="en"> --->
+            <!---	<meta charset="UTF-8"> --->
+            <!---	<link rel="stylesheet" href="async.css"> --->
+            <!---	<title>Async - pso.js demo</title> --->
+            <!---</head> --->
+            <!--- <body> --->
+
+            	<div class="app">
+            		<p class="desc">
+            			Mencari nilai x yang dapat memaksimalkan fungsi tujuan atau objective function <code>f(x) = -x^2, di mana x dalam interval [-5, 5]</code>.
+            			Fungsi objektif tersebut dilakukan returns secara asynchron melalui penggunakan
+            			<code>setTimeout</code> dengan nilai random kecil sebagai timeout.
+            			Di mana setiap nilai yang ditelusuri <code>x</code> merepresentasikan pemanggilan objective function.
+            		</p>
+            		<div class="small"><b>Detail hasil proses iterasi (Real-time):</b></div>
+            		<textarea id="out" rows="16" cols="80"></textarea>
+            	</div>
+
+            	<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_async/pso.js') }}"></script>
+            	<script type="text/javascript" src="{{ url_for('static', filename = 'js/mylib_async/async.js') }}"></script>
+            <!--- </body>
+            <!--- </html>
+
+        '''
+
+    return render_template_string(A_a+template_view+Z_z)
+
+@app.route("/homepage", methods=['GET', 'POST'])
+def homepage():
+    # if request.method == 'POST':
+    #     # holder = Submission(request.form['submitText'])
+    #     holder = request.form['submitText']
+    #     it = holder.res.splitlines()
+
+    #     for line in range(len(it)):
+    #         global tst
+    #         if "What kind of submission is this?" in it[line]:
+    #             if "Sold Property" in it[line+1]:
+    #                 # tst = Sale(request.form['submitText'])
+    #                 tst = request.form['submitText']
+    #                 return jsonify(tst=tst)
+    #             elif "Financed" in it[line+1]:
+    #                 # tst = Loan(request.form['submitText'])
+    #                 tst = request.form['submitText']
+    #                 return jsonify(tst=tst)
+    #             else:
+    #                 # tst = Lease(request.form['submitText'])
+    #                 tst = request.form['submitText']
+    #                 return jsonify(tst=tst)
+
+    def myfunction(x):
+        for i in range(10):
+         return 'Iteration ' + str(i) + '/10'
+
+
+    if request.method == 'POST':
+        story = request.form.get('story')
+        if story:
+            result = myfunction(story)
+            return jsonify(result=result)
+        else:
+            return jsonify(result='Input needed')
+
+    # return render_template('index.html')
+
+    template_view = '''
+            <!--- <html> --->
+            <!--- <head> --->
+            <!--- </head> --->
+            <!--- <body> --->
+
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+            <script type=text/javascript>
+                $(function() {
+                  $('a#process_input').bind('click', function() {
+                    $.post('/', {
+                      story: $('textarea[name="story"]').val(),
+                    }, function(data) {
+                      $('#result').text(data.result);
+                    });
+                    return false;
+                  });
+                });
+            </script>
+
+            <div class='container'>
+            <form>
+                <textarea id="text_input" rows="4" cols="80" name=story></textarea>
+                <br>
+                <a href=# id=process_input><button class='btn btn-default'>Submit</button></a>
+            </form>
+            <br>
+            <p><h2 align='center'>Result:</h2><h2 id=result align='center'></h2></p>
+
+        </div>
+
+            <!--- <div class="textAreaCont"> --->
+            <!---    <textarea rows="4" cols="50" class="textArea" id="getText" readonly></textarea> --->
+            <!---    <button class="smallButton" id="saveAsButton">SAVE AS</button> --->
+            <!---    <button class="smallButton" id="copyButton">COPY</button> --->
+            <!--- </div> --->
+
+        '''
+
+    return render_template_string(A_a+template_view+Z_z)
+
+@app.route("/testView", methods=['GET', 'POST'])
+def testView():
+
+    if request.method == 'POST': # dioperasikan dihalaman sendiri tanpa send ke route, misal /testView
+
+        var1_in = float(request.form['var1'])
+        var2_in = request.form['var2']
+        var3_in = request.form['var3']
+        c = 2*var1_in
+
+        template_view = '''
+
+            <!DOCTYPE html>
+            <html lang="en"><head>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <link href="{{ url_for('static', filename = 'css/css_testView/tailwind.min.css') }}" rel="stylesheet">
+                    <title>Web App Prediksi Hasil Pengujian</title>
+                </head>
+                <body class="
+                        flex flex-col
+                        justify-between
+                        item-center
+                        p-8
+                        min-h-screen
+                        bg-gradient-to-r
+                        from-green-400
+                        to-blue-500
+                        text-gray-800
+                        md:flex-row
+                    ">
+                    <main class="bg-white p-16 rounded-lg">
+                        <h1 class="text-3xl font-bold mb-8">
+                            Prediksi Hasil Pengujian:
+                        </h1>
+
+                        <form action="/testView" method="post" class="flex flex-col">
+                            <label for="Usia" class="mb-2">Nama Var. 1</label>
+                            <input type="text" name="var1" {% if var1 is defined and var1 %} value="{{var1}}" {% else %} value="" {% endif %} placeholder="Variabel_1" required="required" class="p-4 bg-gray-100 rounded-md">
+
+                            <label for="Nama Var. 2" class="mt-4 mb-2">Jenis Kelamin:</label>
+                            <select name="var2" id="Var2" class="p-4 bg-gray-100 rounded-md">
+                                {% if var2 is defined and var2 %}
+                                <option value="pria" {% if(var2=='pria') %} selected="selected" {% endif %}>Pria</option>
+                                <option value="wanita" {% if(var2=='wanita') %} selected="selected" {% endif %}>Wanita</option>
+                                {% else %}
+                                <option value="pria" selected="selected">Pria</option>
+                                <option value="wanita">Wanita</option>
+                                {% endif %}
+                            </select>
+
+                            <label for="Nama Var. 3" class="mt-4 mb-2">Nama Var. 3:</label>
+                            <select name="var3" id="Var3" class="p-4 bg-gray-100 rounded-md">
+                                {% if var3 is defined and var3 %}
+                                <option value="Ya" {% if(var3=='Ya') %} selected="selected" {% endif %}>Ya</option>
+                                <option value="Tidak" {% if(var3=='Tidak') %} selected="selected" {% endif %}>Tidak</option>
+                                {% else %}
+                                <option value="Ya" selected="selected">Ya</option>
+                                <option value="Tidak">Tidak</option>
+                                {% endif %}
+                            </select>
+
+                            <button type="submit" class="
+                                    flex
+                                    justify-center
+                                    align-center
+                                    mt-8
+                                    p-4
+                                    bg-gradient-to-r
+                                    from-green-400
+                                    to-blue-500
+                                    text-white
+                                    rounded-md
+                                ">
+                                Hitung Hasil Prediksi
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right ml-4">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </form>
+                    </main>
+                    <section class="mt-8 h-full flex-auto rounded-lg md:mt-0 md:ml-8">
+                        <div class="bg-white p-16 rounded-lg">
+                            <h1 class="text-2xl mb-8">
+                                Estimasi hasil prediksinya adalah
+                            </h1>
+                            {% if c_save is defined and c_save %}
+                            <h2 class="text-5xl font-bold">USD {{c_save}}</h2>
+                            {% endif %}
+
+                            <div class="mt-8">
+                                {% if var1 is defined and var1 %}
+                                <p>Usia: {{var1}} tahun</p>
+                                <p>Jenis kelamin: {{var2}}</p>
+                                <p>Status perokok: {{var3}}</p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <div class="flex justify-around bg-white p-16 rounded-lg mt-8">
+                            <img class="h-24 md:h-28" src="{{ url_for('static', filename = 'img/logo filkom.png') }}" alt="logo-filkom">
+                            <img class="h-24 md:h-28" src="{{ url_for('static', filename = 'img/conan.jpg') }}" alt="kartun-conan">
+                        </div>
+                    </section>
+
+            </body></html>
+
+        '''
+
+        return render_template_string(template_view, var1 = var1_in, var2 = var2_in, var3 = var3_in, c_save = c)
+
+    else: # untuk yang 'GET' data awal untuk di send ke /testView
+
+        template_view = '''
+
+            <!DOCTYPE html>
+            <html lang="en"><head>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+                    <meta charset="UTF-8">
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <link href="{{ url_for('static', filename = 'css/css_testView/tailwind.min.css') }}" rel="stylesheet">
+                    <title>Web App Prediksi Hasil Pengujian</title>
+                </head>
+                <body class="
+                        flex flex-col
+                        justify-between
+                        item-center
+                        p-8
+                        min-h-screen
+                        bg-gradient-to-r
+                        from-green-400
+                        to-blue-500
+                        text-gray-800
+                        md:flex-row
+                    ">
+                    <main class="bg-white p-16 rounded-lg">
+                        <h1 class="text-3xl font-bold mb-8">
+                            Prediksi Hasil Pengujian:
+                        </h1>
+
+                        <form action="/testView" method="post" class="flex flex-col">
+                            <label for="Usia" class="mb-2">Nama Var. 1</label>
+                            <input type="text" name="var1" {% if var1 is defined and var1 %} value="{{var1}}" {% else %} value="" {% endif %} placeholder="Variabel_1" required="required" class="p-4 bg-gray-100 rounded-md">
+
+                            <label for="Nama Var. 2" class="mt-4 mb-2">Jenis Kelamin:</label>
+                            <select name="var2" id="Var2" class="p-4 bg-gray-100 rounded-md">
+                                {% if var2 is defined and var2 %}
+                                <option value="pria" {% if(var2=='pria') %} selected="selected" {% endif %}>Pria</option>
+                                <option value="wanita" {% if(var2=='wanita') %} selected="selected" {% endif %}>Wanita</option>
+                                {% else %}
+                                <option value="pria" selected="selected">Pria</option>
+                                <option value="wanita">Wanita</option>
+                                {% endif %}
+                            </select>
+
+                            <label for="Nama Var. 3" class="mt-4 mb-2">Nama Var. 3:</label>
+                            <select name="var3" id="Var3" class="p-4 bg-gray-100 rounded-md">
+                                {% if var3 is defined and var3 %}
+                                <option value="Ya" {% if(var3=='Ya') %} selected="selected" {% endif %}>Ya</option>
+                                <option value="Tidak" {% if(var3=='Tidak') %} selected="selected" {% endif %}>Tidak</option>
+                                {% else %}
+                                <option value="Ya" selected="selected">Ya</option>
+                                <option value="Tidak">Tidak</option>
+                                {% endif %}
+                            </select>
+
+                            <button type="submit" class="
+                                    flex
+                                    justify-center
+                                    align-center
+                                    mt-8
+                                    p-4
+                                    bg-gradient-to-r
+                                    from-green-400
+                                    to-blue-500
+                                    text-white
+                                    rounded-md
+                                ">
+                                Hitung Hasil Prediksi
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right ml-4">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </form>
+                    </main>
+                    <section class="mt-8 h-full flex-auto rounded-lg md:mt-0 md:ml-8">
+                        <div class="bg-white p-16 rounded-lg">
+                            <h1 class="text-2xl mb-8">
+                                Estimasi hasil prediksinya adalah
+                            </h1>
+                            {% if c_save is defined and c_save %}
+                            <h2 class="text-5xl font-bold">USD {{c_save}}</h2>
+                            {% endif %}
+
+                            <div class="mt-8">
+                                {% if var1 is defined and var1 %}
+                                <p>Usia: {{var1}} tahun</p>
+                                <p>Jenis kelamin: {{var2}}</p>
+                                <p>Status perokok: {{var3}}</p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                        <div class="flex justify-around bg-white p-16 rounded-lg mt-8">
+                            <img class="h-24 md:h-28" src="{{ url_for('static', filename = 'img/logo filkom.png') }}" alt="logo-filkom">
+                            <img class="h-24 md:h-28" src="{{ url_for('static', filename = 'img/conan.jpg') }}" alt="kartun-conan">
+                        </div>
+                    </section>
+
+            </body></html>
+
+        '''
+
+        return render_template_string(template_view)
+
+@app.route("/testView2", methods=['GET', 'POST'])
+def testView2():
+
+    if request.method == 'POST': # dioperasikan dihalaman sendiri tanpa send ke route, misal /testView2
+
+        var1_in = float(request.form['var1'])
+        var2_in = request.form['var2']
+        var3_in = request.form['var3']
+        c = 2*var1_in
+
+        template_view = '''
+            <script type="text/javascript" src="{{ url_for('static', filename = 'js/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.min.js') }}"></script>
+
+            <div class="row">
+                    <div class="col-md-6">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">Prediksi Hasil Pengujian: </h3>
+                            <p class="text-muted m-b-30 font-13"> masukkan nilai parameter Anda </p>
+                            <form action="/testView2" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="exampleInputuname" class="col-sm-3 control-label">Nilai Skor*</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <input type="text" name="var1" {% if var1 is defined and var1 %} value="{{var1}}" {% else %} value="" {% endif %} class="form-control" id="exampleInputuname" placeholder="Skor" required="required">
+                                            <div class="input-group-addon"><i class="ti-user"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-sm-3  control-label">Jenis Gender*</label>
+                                    <div class="col-sm-9">
+                                    <select name="var2" class="form-control">
+                                        {% if var2 is defined and var2 %}
+                                        <option value="pria" {% if(var2=='pria') %} selected="selected" {% endif %}>Pria</option>
+                                        <option value="wanita" {% if(var2=='wanita') %} selected="selected" {% endif %}>Wanita</option>
+                                        {% else %}
+                                        <option value="pria" selected="selected">Pria</option>
+                                        <option value="wanita">Wanita</option>
+                                        {% endif %}
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Percentage</label>
+                                     <div class="col-sm-9">
+                                    <input type="text" name="var3" {% if var3 is defined and var3 %} value="{{var3}}" {% else %} value="" {% endif %} class="form-control percentage-inputmask" id="percentage-mask" placeholder="Enter Value in %">
+                                    </div>
+                                </div>
+
+                                <div class="form-group m-b-0">
+                                    <div class="col-sm-offset-3 col-sm-9 text-right">
+                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Hitung Hasil Prediksi</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="white-box row">
+                            <h3 class="box-title m-b-0">Estimasi hasil prediksinya adalah </h3>
+                            {% if c_save is defined and c_save %}
+                            <p class="text-muted m-b-30 font-13"> Nilai Skor = {{c_save}} </p>
+                            {% endif %}
+
+                            <div class="mt-8">
+                                {% if var1 is defined and var1 %}
+                                <p>Nilai Skor: {{var1}} tahun</p>
+                                <p>Jenis kelamin: {{var2}}</p>
+                                <p>Persentase (%): {{var3}}</p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <div class="white-box mt-8 row">
+                    <div class="justify-around bg-white rounded-lg">
+                            <img class="col-md-3 col-xs-12" src="{{ url_for('static', filename = 'img/logo filkom.png') }}" alt="logo-filkom">
+                            <img class="col-md-3 col-xs-12" src="{{ url_for('static', filename = 'img/conan.jpg') }}" alt="kartun-conan">
+                    </div>
+
+                     </div>
+                    </div>
+
+                </div>
+
+        '''
+
+        return render_template_string(A_a+template_view+Z_z, var1 = var1_in, var2 = var2_in, var3 = var3_in, c_save = c)
+
+    else: # untuk yang 'GET' data awal untuk di send ke /testView2
+
+        template_view = '''
+            <script type="text/javascript" src="{{ url_for('static', filename = 'js/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
+            <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.min.js') }}"></script>
+
+            <div class="row">
+                    <div class="col-md-6">
+                        <div class="white-box">
+                            <h3 class="box-title m-b-0">Prediksi Hasil Pengujian: </h3>
+                            <p class="text-muted m-b-30 font-13"> masukkan nilai parameter Anda </p>
+                            <form action="/testView2" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="exampleInputuname" class="col-sm-3 control-label">Nilai Skor*</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <input type="text" name="var1" {% if var1 is defined and var1 %} value="{{var1}}" {% else %} value="" {% endif %} class="form-control" id="exampleInputuname" placeholder="Skor" required="required">
+                                            <div class="input-group-addon"><i class="ti-user"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1" class="col-sm-3  control-label">Jenis Gender*</label>
+                                    <div class="col-sm-9">
+                                    <select name="var2" class="form-control">
+                                        {% if var2 is defined and var2 %}
+                                        <option value="pria" {% if(var2=='pria') %} selected="selected" {% endif %}>Pria</option>
+                                        <option value="wanita" {% if(var2=='wanita') %} selected="selected" {% endif %}>Wanita</option>
+                                        {% else %}
+                                        <option value="pria" selected="selected">Pria</option>
+                                        <option value="wanita">Wanita</option>
+                                        {% endif %}
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">Percentage</label>
+                                     <div class="col-sm-9">
+                                    <input type="text" name="var3" {% if var3 is defined and var3 %} value="{{var3}}" {% else %} value="" {% endif %} class="form-control percentage-inputmask" id="percentage-mask" placeholder="Enter Value in %">
+                                    </div>
+                                </div>
+
+                                <div class="form-group m-b-0">
+                                    <div class="col-sm-offset-3 col-sm-9 text-right">
+                                        <button type="submit" class="btn btn-info waves-effect waves-light m-t-10">Hitung Hasil Prediksi</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="white-box row">
+                            <h3 class="box-title m-b-0">Estimasi hasil prediksinya adalah </h3>
+                            {% if c_save is defined and c_save %}
+                            <p class="text-muted m-b-30 font-13"> Nilai Skor = {{c_save}} </p>
+                            {% endif %}
+
+                            <div class="mt-8">
+                                {% if var1 is defined and var1 %}
+                                <p>Nilai Skor: {{var1}} tahun</p>
+                                <p>Jenis kelamin: {{var2}}</p>
+                                <p>Persentase (%): {{var3}}</p>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <div class="white-box mt-8 row">
+                    <div class="justify-around bg-white rounded-lg">
+                            <img class="col-md-3 col-xs-12" src="{{ url_for('static', filename = 'img/logo filkom.png') }}" alt="logo-filkom">
+                            <img class="col-md-3 col-xs-12" src="{{ url_for('static', filename = 'img/conan.jpg') }}" alt="kartun-conan">
+                    </div>
+
+                     </div>
+                    </div>
+                </div>
+
+        '''
+
+        return render_template_string(A_a+template_view+Z_z)
+
+
 @app.route('/launchpad_menu')
 def launchpad_menu():
    return render_template("launchpad_menu.html")
