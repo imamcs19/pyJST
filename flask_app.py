@@ -720,7 +720,7 @@ def dasar2_list():
     conn.close()
 
     #return render_template("list.html", rows=rows)
-    return render_template_string(template_list, rows=rows)
+    return render_template_string(A_a+template_list+Z_z, rows=rows)
 
 
 @app.route('/dasar2_edit/<int:number>', methods=['GET', 'POST'])
@@ -750,7 +750,7 @@ def dasar2_edit(number):
     conn.close()
 
     #return render_template("edit.html", item=item)
-    return render_template_string(template_edit, item=item)
+    return render_template_string(A_a+template_edit+Z_z, item=item)
 
 @app.route('/dasar2_delete/<int:number>')
 def dasar2_delete(number):
@@ -784,7 +784,7 @@ def dasar2_add():
         return redirect('/dasar2_list')
 
     #return render_template("add.html", item=item)
-    return render_template_string(template_add)
+    return render_template_string(A_a+template_add+Z_z)
 
 @app.route('/dasar2_add2')
 def dasar2_add2():
@@ -2009,6 +2009,315 @@ def testView_fp_case2():
     else: # untuk yang 'GET' data awal untuk di send ke /testView_fp_case2
         return render_template_string(A_a+template_view+Z_z)
 
+# cara akses pada url, misal: https://jst.pythonanywhere.com/api/contoh_1_elm/?a=70&b=3&c=2
+@app.route("/api/contoh_1_elm/", methods=["GET"])
+def api_contoh_1_elm():
+    import os.path
+    import pandas as pd
+    import numpy as np
+
+    # load dataset
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    url = os.path.join(BASE_DIR, "static/data_contoh/dataset_dump_tiny.csv")
+
+    a, b, c = request.args.get('a'), request.args.get('b'),request.args.get('c')
+    persentase_data_training = int(a)
+    banyak_fitur = int(b)
+    banyak_hidden_neuron = int(c)
+
+    dataset = pd.read_csv(url, delimiter=';', names = ['Tanggal', 'Harga'], usecols=['Harga'])
+    dataset = dataset.fillna(method='ffill')
+
+    # print("missing value", dataset.isna().sum())
+
+    minimum = int(dataset.min())
+    maksimum = int(dataset.max())
+    new_banyak_fitur = banyak_fitur + 1
+    hasil_fitur = []
+    for i in range((len(dataset)-new_banyak_fitur)+1):
+        kolom = []
+        j = i
+        while j < (i+new_banyak_fitur):
+            kolom.append(dataset.values[j][0])
+            j += 1
+        hasil_fitur.append(kolom)
+    hasil_fitur = np.array(hasil_fitur)
+        # print(hasil_fitur)
+    data_normalisasi = (hasil_fitur - minimum)/(maksimum - minimum)
+
+    data_training = data_normalisasi[:int(
+        persentase_data_training*len(data_normalisasi)/100)]
+    data_testing = data_normalisasi[int(
+        persentase_data_training*len(data_normalisasi)/100):]
+
+    # Training
+    is_singular_matrix = True
+    while(is_singular_matrix):
+        bobot = np.random.rand(banyak_hidden_neuron, banyak_fitur)
+        bias = np.random.rand(banyak_hidden_neuron)
+        h = 1 / \
+            (1 + np.exp(-(np.dot(data_training[:, :banyak_fitur], np.transpose(bobot)) + bias)))
+
+        # cek matrik singular
+        cek_matrik = np.dot(np.transpose(h), h)
+        det_cek_matrik = np.linalg.det(cek_matrik)
+        if det_cek_matrik != 0:
+            is_singular_matrix = False
+        else:
+            is_singular_matrix = True
+
+    h_plus = np.dot(np.linalg.inv(cek_matrik), np.transpose(h))
+    output_weight = np.dot(h_plus, data_training[:, banyak_fitur])
+
+    # Testing
+    h = 1 / \
+        (1 + np.exp(-(np.dot(data_testing[:, :banyak_fitur], np.transpose(bobot)) + bias)))
+    predict = np.dot(h, output_weight)
+    predict = (predict * (maksimum - minimum) + minimum)
+
+    # Hitung nilai evaluasi dgn MAPE
+    aktual = np.array(hasil_fitur[int(
+        persentase_data_training*len(data_normalisasi)/100):, banyak_fitur]).tolist()
+    mape = np.sum(np.abs(((aktual - predict)/aktual)*100))/len(predict)
+    prediksi = predict.tolist()
+    # print(prediksi, 'vs', aktual)
+
+    response = jsonify({'y_aktual': aktual, 'y_prediksi': prediksi, 'mape': mape,'dosen pengampu kelas EF': {'nama': 'Imam Cholissodin, S.Si., M.Kom.', 'email': 'imamcs@ub.ac.id', 'MK': 'Jaringan Saraf Tiruan (JST)'}})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+# cara akses pada url, misal: https://jst.pythonanywhere.com/api/contoh_2_elm/?a=70&b=3&c=2
+@app.route("/api/contoh_2_elm/", methods=["GET"])
+def api_contoh_2_elm():
+    import os.path
+    import pandas as pd
+    import numpy as np
+    from datetime import datetime
+    # from time import strftime
+    import pytz
+
+    # load dataset
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    url = os.path.join(BASE_DIR, "static/data_contoh/dataset_dump_tiny.csv")
+
+    a, b, c = request.args.get('a'), request.args.get('b'),request.args.get('c')
+    persentase_data_training = int(a)
+    banyak_fitur = int(b)
+    banyak_hidden_neuron = int(c)
+    banyak_fitur_target = 1
+
+    dataset = pd.read_csv(url, delimiter=';', names = ['Tanggal', 'Harga'], usecols=['Harga'])
+    dataset = dataset.fillna(method='ffill')
+
+    # print("missing value", dataset.isna().sum())
+
+    minimum = int(dataset.min())
+    maksimum = int(dataset.max())
+    new_banyak_fitur = banyak_fitur + 1
+    hasil_fitur = []
+    for i in range((len(dataset)-new_banyak_fitur)+1):
+        kolom = []
+        j = i
+        while j < (i+new_banyak_fitur):
+            kolom.append(dataset.values[j][0])
+            j += 1
+        hasil_fitur.append(kolom)
+    hasil_fitur = np.array(hasil_fitur)
+        # print(hasil_fitur)
+    data_normalisasi = (hasil_fitur - minimum)/(maksimum - minimum)
+
+    data_training = data_normalisasi[:int(
+        persentase_data_training*len(data_normalisasi)/100)]
+    data_testing = data_normalisasi[int(
+        persentase_data_training*len(data_normalisasi)/100):]
+
+    # set nilai parameter ELM
+    # inisialisasi jumlah fitur (n) yang digunakan sebanyak banyak_fitur,
+    # sedangkan jumlah hidden neuron (m) sebanyak banyak_hidden_neuron,
+    # dan untuk data training sebanyak persentase_data_training dan data testing sebanyak 100 - persentase_data_training
+    n = banyak_fitur
+    m = banyak_hidden_neuron
+
+    byk_data = data_normalisasi.shape[0]
+    Ntrain = int(persentase_data_training*byk_data/100)
+    Ntest = byk_data - Ntrain
+
+    # Training
+    is_singular_matrix = True
+    while(is_singular_matrix):
+        bobot = np.random.rand(banyak_hidden_neuron, banyak_fitur)
+        bias = np.random.rand(banyak_hidden_neuron)
+        h = 1 / \
+            (1 + np.exp(-(np.dot(data_training[:, :banyak_fitur], np.transpose(bobot)) + bias)))
+
+        # cek matrik singular
+        cek_matrik = np.dot(np.transpose(h), h)
+        det_cek_matrik = np.linalg.det(cek_matrik)
+        if det_cek_matrik != 0:
+            is_singular_matrix = False
+        else:
+            is_singular_matrix = True
+
+    h_plus = np.dot(np.linalg.inv(cek_matrik), np.transpose(h))
+    output_weight = np.dot(h_plus, data_training[:, banyak_fitur])
+
+    h_train = 1 / \
+            (1 + np.exp(-(np.dot(data_training[:, :banyak_fitur], np.transpose(bobot)) + bias)))
+    predict_train = np.dot(h_train, output_weight)
+    predict_train = (predict_train * (maksimum - minimum) + minimum)
+
+    # Hitung nilai evaluasi dgn MAPE hasil dari proses Training
+    aktual_train = np.array(hasil_fitur[:int(
+        persentase_data_training*len(data_normalisasi)/100), banyak_fitur]).tolist()
+    mape_train = np.round(np.sum(np.abs(((aktual_train - predict_train)/aktual_train)*100))/len(predict_train),4)
+
+    # simpan hasil Training
+    # membuat name_unik2save utk simpan hasil training
+    name_unik2save = str(datetime.today().astimezone(pytz.timezone('Asia/Jakarta')).strftime('%d-%m-%Y-%H-%M-%S'))
+    # hasil_txt_Ytrain_predict = arr_token_to_txt('filename_HasilTrain_'+name_unik2save+'.txt',arr_token_Ytrain_predict)
+
+    # simpan bobot_input, bias dan bobot_output
+    # set info_param
+    # af mewakili parameter activation function
+    # hd mewakili parameter jumlah_hidden
+    # fi mewakili jumlah fitur input yg diset
+    # ft mewakili jumlah fitur target
+    # elm_train mewakili label train ELM-nya
+    # ev_train mewakili nilai evaluasi hasil training
+
+    af= 'sigmoid'
+    # af= 'tanh'
+
+
+    info_param = '-Ntrain-'+str(Ntrain)+'-Ntest-'+str(Ntest)+'-af-'+af+'-hd-'+str(m)+'-fi-'+str(n)+'-ft-'+str(banyak_fitur_target)
+
+    # save dataframe generate ke *.csv
+    userhome = os.path.expanduser("~").split("/")[-1]
+
+    path = "/home/"+userhome+"/mysite/static/simpan_model_elm"
+    # if not os.path.exists(path):
+    #     os.makedirs(path)
+    # else:
+    #     os.rmdir(path)
+    #     os.makedirs(path)
+
+    import shutil
+    folder = "/home/"+userhome+"/mysite/static/simpan_model_elm"
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        if os.path.isfile(file_path) or os.path.islink(file_path):
+            os.unlink(file_path)
+        elif os.path.isdir(file_path):
+            shutil.rmtree(file_path)
+    # os.makedirs(path)
+
+    nama_path_hasil = "static/simpan_model_elm/"+name_unik2save
+    nama_file_csv_bobot_input = nama_path_hasil+info_param+'_bobot_input'+'-Evtrain-'+str(mape_train)+'.csv'
+    nama_file_csv_bias = nama_path_hasil+info_param+'_bias'+'-Evtrain-'+str(mape_train)+'.csv'
+    nama_file_csv_bobot_output = nama_path_hasil+info_param+'_bobot_output'+'-Evtrain-'+str(mape_train)+'.csv'
+
+    bobot_input = bobot
+    bobot_output = output_weight
+
+    pd.DataFrame(bobot_input).to_csv(os.path.join(BASE_DIR, nama_file_csv_bobot_input), header=None, index=None)
+    pd.DataFrame(bias).to_csv(os.path.join(BASE_DIR, nama_file_csv_bias), header=None, index=None)
+    pd.DataFrame(bobot_output).to_csv(os.path.join(BASE_DIR, nama_file_csv_bobot_output), header=None, index=None)
+
+
+    # Testing
+    import json
+    from flask import Response
+
+    userhome = os.path.expanduser("~").split("/")[-1]
+    # print(userhome)
+
+    path = "/home/"+userhome+"/mysite/static/simpan_model_elm"
+
+    folder_path = path
+    # penjelasan makna [::-1] => mulai dari end sampai awal, down increment dengan 1
+    # contoh:
+    # >>> 'abcdefghijklm'[::3]  # beginning to end, counting by 3
+    # 'adgjm'
+    # >>> 'abcdefghijklm'[::-3] # end to beginning, counting down by 3
+    # 'mjgda'
+
+    list_file_last_modified=os.listdir(os.path.join(BASE_DIR,folder_path))[::-1][:]
+    # print(list_file_last_modified)
+
+    if(len(list_file_last_modified)>0):
+        # 15-08-2022-22-42-49
+        list_file_last_modified.sort(key=lambda x: datetime.strptime(x[:19], '%d-%m-%Y-%H-%M-%S'))
+        # print(list_file_last_modified)
+
+        # get 3 file by date terbaru
+        # hasil_get_3_file_by_date_terbaru = list_file_last_modified[-3:]
+        # print(hasil_get_3_file_by_date_terbaru)
+
+        # get 3 file dengan mape terkecil
+        list_file_last_modified.sort(key= lambda x: float(x.split('-')[-1].replace(".csv","")))
+        hasil_get_3_file_by_mape_terkecil = list_file_last_modified[:3]
+
+        # hasil_str = ''
+        # for idx_get_filename in range(len(hasil_get_3_file_by_date_terbaru)):
+        #     hasil_str += ''.join(str(hasil_get_3_file_by_date_terbaru[idx_get_filename]))
+        #     hasil_str += '<br>'
+        # # return hasil_str
+
+        hasil_str = ''
+        for idx_get_filename in range(len(hasil_get_3_file_by_mape_terkecil)):
+            hasil_str += ''.join(str(hasil_get_3_file_by_mape_terkecil[idx_get_filename]))
+            hasil_str += '<br>'
+        # return hasil_str
+
+        # 24-11-2022-21-14-37-Ntrain-4-Ntest-3-af-sigmoid-hd-2-fi-3-ft-1_bobot_output-Evtrain-2.3311.csv
+        # 24-11-2022-21-14-37-Ntrain-4-Ntest-3-af-sigmoid-hd-2-fi-3-ft-1_bias-Evtrain-2.3311.csv
+        # 24-11-2022-21-14-37-Ntrain-4-Ntest-3-af-sigmoid-hd-2-fi-3-ft-1_bobot_input-Evtrain-2.3311.csv
+
+        nilai_mape_terkecil = hasil_str.split('<br>')[0].split('-')[-1].replace('.csv','')
+        nama_file_dasar_base_name_unik2save_using_mape_terkecil = hasil_str.split('<br>')[0].split('_')[0]
+
+        # Cara baca file csv diatas
+        nama_file_csv_bobot_input = nama_file_dasar_base_name_unik2save_using_mape_terkecil + '_bobot_input-Evtrain-'+nilai_mape_terkecil+'.csv'
+        baca_bobot_input = pd.read_csv(os.path.join(BASE_DIR, "static/simpan_model_elm/"+nama_file_csv_bobot_input), header=None).values
+        # print('baca_bobot_input: \n', baca_bobot_input,'\n')
+
+        nama_file_csv_bias = nama_file_dasar_base_name_unik2save_using_mape_terkecil + '_bias-Evtrain-'+nilai_mape_terkecil+'.csv'
+        baca_bias = pd.read_csv(os.path.join(BASE_DIR, "static/simpan_model_elm/"+nama_file_csv_bias),  header=None).values.flat[:]
+        # print('baca bias: \n', baca_bias,'\n')
+
+        nama_file_csv_bobot_output = nama_file_dasar_base_name_unik2save_using_mape_terkecil + '_bobot_output-Evtrain-'+nilai_mape_terkecil+'.csv'
+        baca_bobot_output = pd.read_csv(os.path.join(BASE_DIR, "static/simpan_model_elm/"+nama_file_csv_bobot_output), header=None).values
+
+        # bobot = np.array(baca_bobot_input)
+        # bias = np.array(baca_bias)
+        # output_weight = np.array(baca_bobot_output)
+
+        h_test = 1 / \
+            (1 + np.exp(-(np.dot(data_testing[:, :banyak_fitur], np.transpose(baca_bobot_input)) + baca_bias)))
+        predict_test = np.dot(h_test, baca_bobot_output)
+        predict_test = (predict_test * (maksimum - minimum) + minimum)
+
+
+    # Hitung nilai evaluasi dgn MAPE hasil dari proses Testing
+    aktual_test = np.array(hasil_fitur[int(
+        persentase_data_training*len(data_normalisasi)/100):, banyak_fitur]).tolist()
+    mape_test = np.round(np.sum(np.abs(((aktual_test - predict_test)/aktual_test)*100))/len(predict_test),4)
+    prediksi_test = predict_test.tolist()
+
+    # Mengubah double square brackets [[]] ke single [], untuk prediksi_test
+    flattened_prediksi_test = []
+    for sublist in prediksi_test:
+        for val in sublist:
+            flattened_prediksi_test.append(val)
+
+    prediksi_test = flattened_prediksi_test
+
+    # print(prediksi, 'vs', aktual)
+
+    response = jsonify({'y_aktual': aktual_test, 'y_prediksi': prediksi_test, 'mape test': mape_test,'mape train': nilai_mape_terkecil,'dosen pengampu kelas EF': {'nama': 'Imam Cholissodin, S.Si., M.Kom.', 'email': 'imamcs@ub.ac.id', 'MK': 'Jaringan Saraf Tiruan (JST)'}})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+
+    return response
 
 @app.route('/launchpad_menu')
 def launchpad_menu():
