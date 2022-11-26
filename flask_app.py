@@ -990,7 +990,6 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
   conn = connect_db()
-  # db = conn.cursor()
   if request.method == "POST":
       mail = request.form['mail']
       uname = request.form['uname']
@@ -999,8 +998,6 @@ def register():
       cmd = "insert into user(Mail, Password,Name,Level) values('{}','{}','{}','{}')".format(mail,passw,uname,'1')
       conn.execute(cmd)
       conn.commit()
-
-      # conn = db
 
       return redirect(url_for("login"))
   return render_template("register.html")
@@ -1019,7 +1016,10 @@ def page_not_found(error):
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return render_template("500.html")
+    userhome = os.path.expanduser("~").split("/")[-1]
+    link_error_debug = "https://www.pythonanywhere.com/user/"+userhome+"/files/var/log/"+userhome+".pythonanywhere.com.error.log"
+
+    return render_template("500.html", link_error_debug = link_error_debug)
 
 @app.route('/iot', methods=["GET", "POST"])
 def iot():
@@ -2321,4 +2321,4 @@ def api_contoh_2_elm():
 
 @app.route('/launchpad_menu')
 def launchpad_menu():
-   return render_template("launchpad_menu.html")
+    return render_template("launchpad_menu.html")
